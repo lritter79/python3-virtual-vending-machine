@@ -66,7 +66,7 @@ def getItems():
             print('Database connection closed.')
     return rows
 
-def updateItemQuantity(item_id):
+def vendItem(item_id):
     try:
         # Establish a connection to the PostgreSQL database
         # read connection parameters
@@ -79,13 +79,16 @@ def updateItemQuantity(item_id):
         cur = conn.cursor()
 
         # Execute the stored procedure
-        cur.callproc('your_stored_procedure_name', (item_id))  # Replace with your procedure name and parameters
+        cur.execute("CALL vend_item(%s)", [item_id])
 
         # If the stored procedure returns any data, fetch it
         # results = cursor.fetchall()  # Uncomment and modify if the stored procedure returns data
 
         # Commit the transaction
         conn.commit()
+
+        for notice in conn.notices:
+            print(notice)
 
     except psycopg2.DatabaseError as e:
         # Handling exceptions raised by the database
@@ -101,5 +104,6 @@ def updateItemQuantity(item_id):
         # Close the cursor and connection
         if cur:
             cur.close()
-        if çonn:
+        if conn is not None:
             conn.close()
+            print('Database connection closed.')

@@ -52,6 +52,33 @@
 -- VALUES ((SELECT floor(random() * 10 + 1)::int), 5);
 --SELECT * FROM quantities
 --CREATE VIEW vending_machine AS
-SELECT items.id AS id, price, item_categories.name AS category_name 
-FROM items 
-JOIN item_categories ON items.category_id = item_categories.id;
+-- SELECT items.id AS id, price, item_categories.name AS category_name 
+-- FROM items 
+-- JOIN item_categories ON items.category_id = item_categories.id;
+
+CREATE OR REPLACE PROCEDURE UpdateItemQuantity(item_id INT)
+LANGUAGE plpgsql
+AS $$
+        DECLARE current_quantity INT;
+        DECLARE vend_item_id INT;
+BEGIN
+	SELECT item_id INTO vend_item_id;
+    -- Check if the item exists in the items table
+    IF EXISTS (SELECT 1 FROM items WHERE items.id = vend_item_id) THEN
+        -- Check if quantity is greater than 0 in the quantity table
+        SELECT quantity INTO current_quantity FROM quantities WHERE quantities.item_id = vend_item_id;
+
+        IF current_quantity > 0 THEN
+            -- Update the quantity by subtracting 1
+            UPDATE quantities SET quantity = quantity - 1 WHERE quantities.item_id = vend_item_id;
+            RAISE NOTICE 'Quantity updated successfully';
+        ELSE
+            RAISE EXCEPTION 'Item has run out';
+        END IF;
+    ELSE
+        RAISE EXCEPTION 'Item does not exist';
+    END IF;
+END;
+$$;
+
+--CALL updateitemquantity(1)

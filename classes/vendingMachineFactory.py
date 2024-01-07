@@ -23,7 +23,7 @@ class VendingMachineFactory:
             else: 
                 item_to_add = VendingMachineItem(item["name"], int(item["price"]), int(item["id"]))
             #make slot
-            item_slot = VendingMachineSlot(item_to_add, int(item["quantity"]), item["column"])
+            item_slot = VendingMachineSlot(item_to_add, item["column"])
             #make row
             has_row = False
             for row in rows:
