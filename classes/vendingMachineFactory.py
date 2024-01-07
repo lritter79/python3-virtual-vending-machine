@@ -15,13 +15,13 @@ class VendingMachineFactory:
             #make item
             item_to_add = None
             if (item["category"] == "gum"):
-                item_to_add = Gum(item["name"], int(item["price"]))
+                item_to_add = Gum(item["name"], int(item["price"]), int(item["id"]))
             elif (item["category"] == "beverage"):
-                item_to_add = Beverage(item["name"], int(item["price"]))
+                item_to_add = Beverage(item["name"], int(item["price"]), int(item["id"]))
             elif (item["category"] == "snack"):
-                item_to_add = SnackFood(item["name"], int(item["price"]))
+                item_to_add = SnackFood(item["name"], int(item["price"]), int(item["id"]))
             else: 
-                item_to_add = VendingMachineItem(item["name"], int(item["price"]))
+                item_to_add = VendingMachineItem(item["name"], int(item["price"]), int(item["id"]))
             #make slot
             item_slot = VendingMachineSlot(item_to_add, int(item["quantity"]), item["column"])
             #make row

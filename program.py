@@ -5,20 +5,24 @@ from classes.vendingMachineRow import VendingMachineRow
 from classes.vendingMachine import VendingMachine
 from classes.vendingMachineFactory import VendingMachineFactory
 from classes.utils.csvReader import CsvReader
-import os
-
+from classes.utils.cursorReader import CursorReader
+from data.connect import getItems
 def main():
-    # Get the current working directory
-    current_directory = os.getcwd()
+    # # Get the current working directory
+    # current_directory = os.getcwd()
 
-    # Construct the file path using the current directory and the 'data' directory
-    file_path = os.path.join(current_directory, 'data', 'data.csv')
-    #item_example = {"name":"X", "category":"gum","price":1, "column":1, "quantity":1, "row":"A"}
-    items = CsvReader.get_dicts_from_csv(file_path)
+    # # Construct the file path using the current directory and the 'data' directory
+    # file_path = os.path.join(current_directory, 'data', 'data.csv')
+    # #item_example = {"name":"X", "category":"gum","price":1, "column":1, "quantity":1, "row":"A"}
+    # items = CsvReader.get_dicts_from_csv(file_path)
     #populate vending machine
+    rows = getItems()
+    items = []
+    for row in rows:
+        items.append(CursorReader.get_dict_from_row(row))
     vendingMachine = VendingMachineFactory.create_vending_machine(items)
-    del current_directory
-    del file_path
+    #del current_directory
+    #del file_path
     run = True
     print("Welcome to the Python Virtual Vending Machine. What would you like to do?")
     print("a: Display all items")
@@ -38,14 +42,22 @@ def main():
                 else:
                     row = None
                     # try for unsafe code 
+
+                try:
+                    if itemCode[1].isdigit() == False:                     
+                        raise ValueError("Invalid Second Character")
+                except ValueError as e: 
+                    print(e) 
+                    continue
+
                 try: 
                     if itemCode[0].upper() in vendingMachine.rows:
                         row = vendingMachine.rows[itemCode[0].upper()]
                     if row == None:
                         raise KeyError("Invalid Item Code")
                     else:
-                        if itemCode[1] in row.slot_dict:
-                            row.slot_dict[itemCode[1]].vend_item()
+                        if int(itemCode[1]) in row.slot_dict:
+                            row.slot_dict[int(itemCode[1])].vend_item()
                             isVending = False
                         else:
                             raise KeyError("Invalid Item Code")
