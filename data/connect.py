@@ -1,6 +1,7 @@
 import psycopg2
 from data.config import config
 from classes.utils.cursorReader import CursorReader
+from psycopg2 import Error
 
 def connect():
     """ Connect to the PostgreSQL database server """
@@ -64,3 +65,41 @@ def getItems():
             conn.close()
             print('Database connection closed.')
     return rows
+
+def updateItemQuantity(item_id):
+    try:
+        # Establish a connection to the PostgreSQL database
+        # read connection parameters
+        params = config()
+
+        # connect to the PostgreSQL server
+        print('Connecting to the PostgreSQL database...')
+        conn = psycopg2.connect(**params)
+		
+        cur = conn.cursor()
+
+        # Execute the stored procedure
+        cur.callproc('your_stored_procedure_name', (item_id))  # Replace with your procedure name and parameters
+
+        # If the stored procedure returns any data, fetch it
+        # results = cursor.fetchall()  # Uncomment and modify if the stored procedure returns data
+
+        # Commit the transaction
+        conn.commit()
+
+    except psycopg2.DatabaseError as e:
+        # Handling exceptions raised by the database
+        print(f"Database error: {e}")
+        conn.rollback()  # Rollback the transaction in case of error
+
+    except Error as e:
+        # Handling other psycopg2 exceptions
+        print(f"Error occurred: {e}")
+        conn.rollback()  # Rollback the transaction in case of error
+
+    finally:
+        # Close the cursor and connection
+        if cur:
+            cur.close()
+        if çonn:
+            conn.close()
