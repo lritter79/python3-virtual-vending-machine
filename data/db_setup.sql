@@ -1,11 +1,12 @@
----- Table: public.item_categories
+-- Table: public.item_categories
+-- CREATE SEQUENCE catergories_serial START WITH 1;
 
 -- DROP TABLE IF EXISTS public.item_categories;
 
 -- CREATE TABLE IF NOT EXISTS public.item_categories
 -- (
 --     name text COLLATE pg_catalog."default",
---     id integer NOT NULL DEFAULT 'nextval('catergories_serial'::regclass)',
+--     id integer NOT NULL DEFAULT nextval('catergories_serial'),
 --     CONSTRAINT item_categories_pkey PRIMARY KEY (id)
 -- )
 
@@ -14,15 +15,18 @@
 -- ALTER TABLE IF EXISTS public.item_categories
 --     OWNER to postgres;
 
---SELECT * from item_categories
--- Table: public.items
+-- SELECT * from item_categories;
+-- --Table: public.items
+
+-- CREATE SEQUENCE items_serial START WITH 1;
+
 
 -- DROP TABLE IF EXISTS public.items;
 
 -- CREATE TABLE IF NOT EXISTS public.items
 -- (
 --     name text COLLATE pg_catalog."default",
---     id integer NOT NULL DEFAULT 'nextval('items_serial'::regclass)',
+--     id integer NOT NULL DEFAULT nextval('items_serial'),
 --     category_id integer NOT NULL,
 --     price real,
 --     CONSTRAINT items_pkey PRIMARY KEY (id),
@@ -46,8 +50,17 @@
 --     (category_id ASC NULLS LAST)
 --     TABLESPACE pg_default;
 
+-- INSERT INTO item_categories (name)
+-- VALUES ('candy');
+-- INSERT INTO item_categories (name)
+-- VALUES ('gum');
+-- INSERT INTO item_categories (name)
+-- VALUES ('beverage');
+-- INSERT INTO item_categories (name)
+-- VALUES ('snack');
+
 -- INSERT INTO items (name, category_id)
--- VALUES ('Peanutbutter Cup', 1)
+-- VALUES ('Peanutbutter Cup', 1);
 -- INSERT INTO items (name, category_id)
 -- VALUES ('Peanutbutter Chew', 2);
 -- INSERT INTO items (name, category_id)
@@ -56,8 +69,8 @@
 -- VALUES ('Peanutbutter Sandwich', 4);
 -- INSERT INTO items (name, category_id)
 -- VALUES ('Yoohoo', 3);
--- SELECT * FROM items
--- Table: public.slots
+-- SELECT * FROM items;
+-- --Table: public.slots
 
 -- DROP TABLE IF EXISTS public.slots;
 
@@ -78,19 +91,19 @@
 -- ALTER TABLE IF EXISTS public.slots
 --     OWNER to postgres;
 -- INSERT INTO slots (slot_row, slot_column, item_id)
--- VALUES ('A', 2, 1);
+-- VALUES ('A', 2, 3);
 -- INSERT INTO slots (slot_row, slot_column, item_id)
--- VALUES ('B', 2, 2);
+-- VALUES ('B', 2, 4);
 -- INSERT INTO slots (slot_row, slot_column, item_id)
--- VALUES ('D', 9, 3);
+-- VALUES ('D', 9, 5);
 -- INSERT INTO slots (slot_row, slot_column, item_id)
--- VALUES ('G', 4, 4);
+-- VALUES ('G', 4, 6);
 -- INSERT INTO slots (slot_row, slot_column, item_id)
--- VALUES ('C', 7, 5);
--- SELECT  * FROM slots
+-- VALUES ('C', 7, 7);
+-- SELECT  * FROM slots;
 
 
----- Table: public.quantities
+-- -- Table: public.quantities
 
 -- DROP TABLE IF EXISTS public.quantities;
 
@@ -112,17 +125,17 @@
 
 -- SELECT floor(random() * 10 + 1)::int;
 -- INSERT INTO quantities (quantity, item_id)
--- VALUES ((SELECT floor(random() * 10 + 1)::int), 1);
---INSERT INTO quantities (quantity, item_id)
---VALUES ((SELECT floor(random() * 10 + 1)::int), 2);
---INSERT INTO quantities (quantity, item_id)
 -- VALUES ((SELECT floor(random() * 10 + 1)::int), 3);
 -- INSERT INTO quantities (quantity, item_id)
 -- VALUES ((SELECT floor(random() * 10 + 1)::int), 4);
 -- INSERT INTO quantities (quantity, item_id)
 -- VALUES ((SELECT floor(random() * 10 + 1)::int), 5);
---SELECT * FROM quantities
---CREATE VIEW vending_machine AS
+-- INSERT INTO quantities (quantity, item_id)
+-- VALUES ((SELECT floor(random() * 10 + 1)::int), 6);
+-- INSERT INTO quantities (quantity, item_id)
+-- VALUES ((SELECT floor(random() * 10 + 1)::int), 7);
+-- SELECT * FROM quantities;
+-- CREATE VIEW vending_machine AS
 -- SELECT items.id AS id, price, item_categories.name AS category_name 
 -- FROM items 
 -- JOIN item_categories ON items.category_id = item_categories.id;
@@ -152,4 +165,4 @@
 -- END;
 -- $$;
 
--- CALL updateitemquantity(1)
+-- CALL vend_item(7)
