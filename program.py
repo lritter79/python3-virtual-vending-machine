@@ -8,14 +8,6 @@ from classes.utils.csvReader import CsvReader
 from classes.utils.cursorReader import CursorReader
 from data.connect import getItems
 def main():
-    # # Get the current working directory
-    # current_directory = os.getcwd()
-
-    # # Construct the file path using the current directory and the 'data' directory
-    # file_path = os.path.join(current_directory, 'data', 'data.csv')
-    # #item_example = {"name":"X", "category":"gum","price":1, "column":1, "quantity":1, "row":"A"}
-    # items = CsvReader.get_dicts_from_csv(file_path)
-    #populate vending machine
     rows = getItems()
     items = []
     for row in rows:
